@@ -1,34 +1,41 @@
 import express from "express";
 import http from "http";
-import SocketIO from "socket.io";
-import cors from "cors";
-
+import io from "socket.io";
+import http from "http";
 import routes from "./routes";
 
 class App {
     constructor() {
-        this.server = express();
+        this.app = express();
+        this.server = http.Server(this.app);
         this.middlewares();
+        this.socket();
         this.routes();
 
-        this.app = http.Server(this.server);
-        this.io = new SocketIO(this.app);
+        this.connectedUsers = {};
+    }
+
+    socket() {
+        this.io = io(this.server);
+
+        this.io.on("connection", (socket) => {
+            const { user_id } = socket.handshake.query;
+            this.connectedUsers[user_id] = socket.id;
+        });
     }
 
     middlewares() {
-        this.server.use(express.json());
+        this.app.use(express.json());
 
-        this.server.use((req, res, next) => {
+        this.app.use((req, res, next) => {
             req.io = this.io;
 
-            return next();
+            next();
         });
-
-        //this.routes.use(cors);
     }
 
     routes() {
-        this.server.use(routes);
+        this.app.use(routes);
     }
 }
 

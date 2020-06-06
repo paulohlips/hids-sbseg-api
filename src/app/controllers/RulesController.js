@@ -3,6 +3,8 @@ import Rules from "../models/Rules";
 class RulesController {
     // GET
     async index(req, res) {
+        console.log("GET /rules");
+
         try {
             if (req.query.rule) {
                 const rules = await Rules.find({
@@ -13,6 +15,7 @@ class RulesController {
             }
 
             const rules = await Rules.find();
+
             return res.status(200).json(rules);
         } catch (err) {
             return res.status(400).json({ error: err });
@@ -22,7 +25,7 @@ class RulesController {
     // POST
     async store(req, res) {
         const { name } = req.body;
-        console.log(req.io);
+
         const verification = await Rules.findOne({ name });
 
         if (verification) {
@@ -31,7 +34,7 @@ class RulesController {
         try {
             const rule = await Rules.create(req.body);
 
-            //req.io.emit("tweet", tweet);
+            req.io.emit("rules", rule);
 
             return res.status(201).json(req.body);
         } catch (err) {
@@ -52,6 +55,8 @@ class RulesController {
         }
 
         const rule = await Rules.update(req.body);
+
+        req.io.emit("rules", req.body);
 
         return res.status(201).json({ message: "Updated!" });
     }
