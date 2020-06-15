@@ -18,7 +18,7 @@ class RulesController {
 
             return res.status(200).json(rules);
         } catch (err) {
-            return res.status(400).json({ error: err });
+            return res.status(500).json({ error: err });
         }
     }
 
@@ -38,7 +38,7 @@ class RulesController {
 
             return res.status(201).json(req.body);
         } catch (err) {
-            return res.status(400).json({ error: err });
+            return res.status(500).json({ error: err });
         }
     }
 
@@ -68,7 +68,7 @@ class RulesController {
         });
 
         if (!RulesToDelete) {
-            return res.status(400).json({ error: "Rule doesn't exists." });
+            return res.status(500).json({ error: "Rule doesn't exists." });
         }
 
         const result = await Rules.deleteOne({ id: req.params.id });

@@ -1,22 +1,17 @@
 import { Router } from "express";
 import cors from "cors";
 
+import SessionController from "./app/controllers/SessionController";
+import DevicesController from "./app/controllers/DevicesController";
 import RulesController from "./app/controllers/RulesController";
 
 const routes = new Router();
 
 routes.use(cors());
 
-routes.get("/tweets", (req, res) => {
-    return res.json([{ _id: 1, tweet: "ESSE É UM TESTE" }]);
-});
-
-routes.post("/tweets", (req, res) => {
-    //console.log("INFO NO SOCKET", req.io);
-
-    //req.io.emit("tweet", { _id: 1, tweet: "AAAAAAAAAAAAAAA" });
-    return res.json({ tweet: "É O QUE TEM", _id: 1 });
-});
+routes.post("/devices", DevicesController.store);
+routes.get("/devices", DevicesController.index);
+routes.put("/devices/:id", DevicesController.update);
 
 routes.get("/", (req, res) => {
     return res.send("Bem-vindo");

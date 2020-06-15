@@ -1,7 +1,3 @@
-/*
-Arquivo de passa as configurações de conexão com BD
-*/
-
 import mongoose from "mongoose";
 
 import conn from "../config/dbConnection";
