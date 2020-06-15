@@ -25,6 +25,14 @@ const RulesSchema = new mongoose.Schema(
             type: String,
             required: true,
         },
+        repeatable: {
+            type: Boolean,
+            required: true,
+        },
+        blockchain_shared: {
+            type: Boolean,
+            required: true,
+        },
     },
     {
         versionKey: false,
